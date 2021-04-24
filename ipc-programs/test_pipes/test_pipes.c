@@ -109,6 +109,8 @@ int do_child_process(int read_fd)
 int main()
 {
     memset(&child_processes, 0, sizeof(child_process_info_t) * CHILD_PROCESSES);
+
+    printf("Parent process "PID_FORMAT" launched\n", getpid());
     for (int i = 0; i < CHILD_PROCESSES; i++) {
         int fd[2];
         pipe(fd);
@@ -119,6 +121,7 @@ int main()
             perror("fork");
             return 1;
         case 0:
+            printf("Child process "PID_FORMAT" forked\n", getpid());
             close(fd[1]);
             return do_child_process(fd[0]);
         default:
